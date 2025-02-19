@@ -174,14 +174,18 @@ private:
 
 int main(){
     LinkedList<const char*> lista;
-    lista.append("ana");
-    lista.append("pedro");
-    lista.append("diana");
-    lista.append("juan");
-    lista.append("sebastian");
-    lista.print();
-    lista.insert("tomas", 3);
-    lista.print();
-    lista.reverse();
-    lista.print();
+    while(true){
+        cout << "choose an option:\n";
+        cout << "1:\n";
+        cout << "2:\n";
+        cout << "3:\n";
+        cout << "4:\n";
+        cout << "5:\n";
+        cout << "6:\n";
+    }
+    // lista.append("ana");
+    // lista.append("pedro");
+    // lista.append("diana");
+    // lista.append("juan");
+    // lista.append("sebastian");
 }
