@@ -64,6 +64,19 @@ public:
         }
         cout << "NULL\n";
         cout << "size: " << size << "\n";
+        cout << "head: " << head->getData() << "\n";
+        cout << "tail: " << tail->getData() << "\n";
+    }
+
+    T get(int index){
+        if(index > size || index < 0){
+            return T();
+        }
+        Node<T>* current = head;
+        for(int i = 0; i < index; i++){
+            current = current->getNext();
+        }
+        return current->getData();
     }
 
     void append(T newValue){
@@ -166,26 +179,38 @@ public:
             cout << "cannot reverse an empty list\n";
         }
     }
+
+    int getSize(){
+        return size;
+    }
+
+    Node<T>* getHead(){
+        return head;
+    }
+
+    Node<T>* getTail(){
+        return tail;
+    }
 private:
     Node<T>* head;
     Node<T>* tail;
     int size;
 };
 
-int main(){
-    LinkedList<const char*> lista;
-    while(true){
-        cout << "choose an option:\n";
-        cout << "1:\n";
-        cout << "2:\n";
-        cout << "3:\n";
-        cout << "4:\n";
-        cout << "5:\n";
-        cout << "6:\n";
-    }
+// int main(){
+    // LinkedList<const char*> lista;
+    // while(true){
+        // cout << "choose an option:\n";
+        // cout << "1:\n";
+        // cout << "2:\n";
+        // cout << "3:\n";
+        // cout << "4:\n";
+        // cout << "5:\n";
+        // cout << "6:\n";
+    // }
     // lista.append("ana");
     // lista.append("pedro");
     // lista.append("diana");
     // lista.append("juan");
     // lista.append("sebastian");
-}
+// }

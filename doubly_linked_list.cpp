@@ -100,10 +100,42 @@ public:
         }
     }
 
+    void remove(int index){
+        NodeDouble<T>* current = head;
+        if(index < 0 || index > size-1 || head == nullptr){
+            cout << "can't remove node at specified index\n";
+            return;
+        }
+        Node<T>* prev = head;
+        if(index == 0){
+            head = prev->getNext();
+            delete prev;
+        }
+        for(int i = 0; i < index; i++){
+
+        }
+    }
+
+    void remove(T value){
+        int index = find(T);
+        if(index == -1){
+            cout << "could not find node with that value\n";
+            return;
+        }
+        remove(index);
+    }
+
     int find(T value){
         int index = 0;
-        NodeDouble
-        while()
+        NodeDouble<T>* current = head;
+        while(current != nullptr){
+            if(current->getData == value){
+                return index;
+            }
+            current = current->getNext();
+            index++;
+        }
+        return -1;
     }
     
     void print(){
