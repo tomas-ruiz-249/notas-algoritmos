@@ -196,21 +196,3 @@ private:
     Node<T>* tail;
     int size;
 };
-
-// int main(){
-    // LinkedList<const char*> lista;
-    // while(true){
-        // cout << "choose an option:\n";
-        // cout << "1:\n";
-        // cout << "2:\n";
-        // cout << "3:\n";
-        // cout << "4:\n";
-        // cout << "5:\n";
-        // cout << "6:\n";
-    // }
-    // lista.append("ana");
-    // lista.append("pedro");
-    // lista.append("diana");
-    // lista.append("juan");
-    // lista.append("sebastian");
-// }
