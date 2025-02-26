@@ -326,6 +326,7 @@ public:
 };
 
 int main(){
+    srand(time(0));
     const int NUM_PRESTAMOS = 10;
     const int MAX_CODIGO_USUARIO = 10;
     const int MAX_CODIGO_LIBRO = 10;
