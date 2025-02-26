@@ -333,8 +333,8 @@ int main(){
     const int MAX_CODIGO_USUARIO = 10;
     const int MAX_CODIGO_LIBRO = 10;
     const int MAX_CODIGO_GENERO = 10;
-    Biblioteca p(MAX_CODIGO_USUARIO, MAX_CODIGO_LIBRO, MAX_CODIGO_GENERO, NUM_PRESTAMOS);
-    p.inicializarLista();
-    p.llenarArreglo();
+    Biblioteca b(MAX_CODIGO_USUARIO, MAX_CODIGO_LIBRO, MAX_CODIGO_GENERO, NUM_PRESTAMOS);
+    b.inicializarLista();
+    b.llenarArreglo();
     return 0;
 }
