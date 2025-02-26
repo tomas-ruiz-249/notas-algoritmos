@@ -28,7 +28,7 @@ public:
     T getData(){
         return data;
     }
-    private:
+private:
     T data;
     Node<T>* next;
 };
