@@ -259,10 +259,7 @@ public:
 };
 
 int* crearArreglo(int x){
-    int* m = new int[x];
-    for (int i = 0; i < x; i++){
-        m[i] = 0;
-    }
+    int* m = new int[x]();
     return m;
 }
 
