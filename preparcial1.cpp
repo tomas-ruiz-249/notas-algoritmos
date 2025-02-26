@@ -313,6 +313,7 @@ public:
             prestamos.append(prestamo);
         }
         prestamos.print();
+        cout << "se han generado " << np << " prestamos\n";
     }
 
     void llenarArreglo(){
