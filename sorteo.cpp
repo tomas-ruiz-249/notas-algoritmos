@@ -38,6 +38,8 @@ void insertionSort(int* arr, int size){
         while(previous >= 0 && arr[previous] > temp){
             arr[previous + 1] = arr[previous];
             previous--;
+            printArray(arr, size);
+            cout << previous << "\n";
         }
         arr[previous + 1] = temp;
     }
@@ -59,14 +61,18 @@ void selectionSort(int* arr, int size){
     }
 }
 
+void shellSort(int* arr, int size){
+    int intervalo = size / 2;
+}
+
 
 int main(){
     const int SIZE = 5;
-    int arr[SIZE] = {5,3,1,4,2};
+    int arr[SIZE] = {14,9,-5,3,-6};
     cout << "arreglo original:\n";
     printArray(arr, SIZE);
     cout << "---------------------\n";
-    selectionSort(arr, SIZE);
+    bubbleSort(arr, SIZE);
     printArray(arr, SIZE);
     return 0;
 }
