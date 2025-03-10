@@ -96,24 +96,74 @@ void quickSort(int* arr, int low, int high){
     }
 }
 
+template<typename T>
+class Tree{
+private:
+    T value;
+    Tree<T>* left;
+    Tree<T>* right;
+public:
+    Tree(T value, Tree<T>* left, Tree<T>* right){
+        this->value = value;
+        this->left = left;
+        this->right = right;
+    }
+
+    Tree(){
+        value = T();
+        left = nullptr;
+        right = nullptr;
+    }
+
+    T getValue(){
+        return value;
+    }
+
+    Tree<T>* getLeft(){
+        return left;
+    }
+
+    Tree<T>* getRight(){
+        return right;
+    }
+
+    void setValue(T value){
+        this->value = value;
+    }   
+
+    void setLeft(Tree<T>* left){
+        this->left = left;
+    }
+
+    void setRight(Tree<T>* right){
+        this->right = right;
+    }
+};
+
+void arrToTree(int* arr, int size, Tree<int>* root, int index = 0){
+    if(index < size){
+        root->setValue(arr[index]);
+        root->setLeft(new Tree<int>());
+        root->setRight(new Tree<int>());
+        arrToTree(arr, size, root->getLeft(), 2 * index + 1);
+        arrToTree(arr, size, root->getRight(), 2 * index + 2);
+    }
+}
+
+void heapSort(int *arr, int size){
+    auto root = new Tree<int>();
+    arrToTree(arr, size, root);
+    cout << "finished tree\n";
+}
+
 
 int main(){
     srand(time(0));
     const int SIZE = 5;
     int arr[SIZE] = {7,-2,4,-8,3};
-    int correcto[SIZE];
     for(int i = 0; i < SIZE; i++){
         // arr[i] = rand() % 10 + 1;
-        correcto[i] = arr[i];
     }
-    
-    cout << "arreglo original:\n";
     printArray(arr, SIZE);
-    cout << "\narreglo sorteado\n";
-    quickSort(arr, 0, SIZE-1);
-    printArray(arr, SIZE);
-    cout << "\narreglo correcto\n";
-    bubbleSort(correcto, SIZE);
-    printArray(correcto, SIZE);
-    return 0;
+    heapSort(arr, SIZE);
 }
