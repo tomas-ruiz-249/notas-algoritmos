@@ -156,14 +156,3 @@ void heapSort(int *arr, int size){
     cout << "finished tree\n";
 }
 
-
-int main(){
-    srand(time(0));
-    const int SIZE = 5;
-    int arr[SIZE] = {7,-2,4,-8,3};
-    for(int i = 0; i < SIZE; i++){
-        // arr[i] = rand() % 10 + 1;
-    }
-    printArray(arr, SIZE);
-    heapSort(arr, SIZE);
-}

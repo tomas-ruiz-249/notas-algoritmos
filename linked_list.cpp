@@ -137,18 +137,7 @@ public:
     }
 
     int find(T value){
-        Node<T>* current = head;
-        int index = 0;
-        while(current != nullptr){
-            if(current->getData() == value){
-                return index;
-            }
-            else{
-                index++;
-                current = current->getNext();
-            }
-        }
-        return -1;
+        return binarySearch(value);
     }
 
     void remove(int index){
@@ -219,33 +208,11 @@ public:
 
 private:    
     void swap(int a, int b){
-        bool cantSwap = (a == b || a < 0 || a >= size || b < 0 || b >= size);
-        if(cantSwap){
-            return;
-        }
-        Node<T>* aPrev = head;
-        Node<T>* bPrev = head;
-        Node<T>* aNode = head;
-        Node<T>* bNode = head;
-        for(int i = 0; i < a - 1 ; i++){
-            aPrev = aPrev->getNext();
-        }
-        if(a != 0){
-            aNode = aPrev->getNext();
-        }
-
-        for(int i = 0; i < b - 1; i++){
-            bPrev = bPrev->getNext();
-        }
-        if(b != 0){
-            bNode = bPrev->getNext();
-        }
-
-        Node<T>* temp = bNode->getNext();
-        aPrev->setNext(bNode);
-        bNode->setNext(bPrev);
-        bPrev->setNext(aNode);
-        aNode->setNext(temp);
+        Node<T>* A = getNode(a);
+        Node<T>* B = getNode(b);
+        T temp = A->getData();
+        A->setData(B->getData());
+        B->setData(temp);
     }
 
     void bubbleSort(){
@@ -258,22 +225,41 @@ private:
         }
     }
 
+    int linearSearch(T value){
+        Node<T>* current = head;
+        int index = 0;
+        while(current != nullptr){
+            if(current->getData() == value){
+                return index;
+            }
+            else{
+                index++;
+                current = current->getNext();
+            }
+        }
+        return -1;
+    }
+
+    int binarySearch(T value){
+        int low = 0;
+        int high = size - 1;
+        int mid;
+        while(low <= high){
+            mid = low + (high - low) / 2;
+            if(get(mid) == value){
+                return mid;
+            }
+            if(get(mid) < value){
+                low = mid + 1;
+            }
+            else{
+                high = mid - 1;
+            }
+        }
+        return -1;
+    }
+
     Node<T>* head;
     Node<T>* tail;
     int size;
 };
-
-int main(){
-    srand(time(0));
-    LinkedList<int> list;
-    int val;
-    for(int i = 10; i >= 0; i--){
-        // val = rand() % 10 + 1;
-        list.append(i);
-    }
-
-    list.print();
-    list.sort();
-    list.print();
-    return 0;
-}
