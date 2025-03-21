@@ -25,7 +25,7 @@ void destruir_mat(int** m, int f) {
     }
     delete[] m;
 }
-
+    
 // Función para imprimir la matriz
 void print_mat(int** m, int f, int c) {
     for (int i = 0; i < f; i++) {

@@ -62,13 +62,15 @@ public:
         cout << "[HEAD]";
         Node<T>* current = head;
         while(current != nullptr){
-            cout << "(" << current->getData() << ")--->";
+            cout << "(" << current->getData() << ")--->\n";
             current = current->getNext();
         }
+        cout << "-----------------------------------------\n";
         cout << "NULL\n";
         cout << "size: " << size << "\n";
         cout << "head: " << head->getData() << "\n";
         cout << "tail: " << tail->getData() << "\n";
+        cout << "-----------------------------------------\n";
     }
 
     T get(int index){
@@ -202,19 +204,29 @@ public:
         return tail;
     }
 
-    void sort(){
-        bubbleSort();
+    void sort(string sort){
+        if(sort == "bubble"){
+            bubbleSort();
+        }
+        else if (sort == "quick"){
+        }
+        else{
+            bubbleSort();
+        }
     }
 
 private:    
+// ---------------------------------sorting------------------------------
     void swap(int a, int b){
+        if(a == b){
+            return;
+        }
         Node<T>* A = getNode(a);
         Node<T>* B = getNode(b);
         T temp = A->getData();
         A->setData(B->getData());
         B->setData(temp);
     }
-
     void bubbleSort(){
         for(int i = 0; i < size; i++){
             for(int j = 0; j < size - i - 1; j++){
@@ -224,6 +236,7 @@ private:
             }
         }
     }
+// ---------------------------------- searching-------------------------------
 
     int linearSearch(T value){
         Node<T>* current = head;
