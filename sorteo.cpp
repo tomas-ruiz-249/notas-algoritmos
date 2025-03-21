@@ -96,63 +96,42 @@ void quickSort(int* arr, int low, int high){
     }
 }
 
-template<typename T>
-class Tree{
-private:
-    T value;
-    Tree<T>* left;
-    Tree<T>* right;
-public:
-    Tree(T value, Tree<T>* left, Tree<T>* right){
-        this->value = value;
-        this->left = left;
-        this->right = right;
+void heapify(int* arr, int size, int root){
+    int largest = root;
+    int left = 2 * root + 1;
+    int right = 2 * root + 2;
+
+    if(left < size && arr[left] > arr[largest]){
+        largest = left;
+    }
+    if(right < size && arr[right] > arr[largest]){
+        largest = right;
     }
 
-    Tree(){
-        value = T();
-        left = nullptr;
-        right = nullptr;
-    }
-
-    T getValue(){
-        return value;
-    }
-
-    Tree<T>* getLeft(){
-        return left;
-    }
-
-    Tree<T>* getRight(){
-        return right;
-    }
-
-    void setValue(T value){
-        this->value = value;
-    }   
-
-    void setLeft(Tree<T>* left){
-        this->left = left;
-    }
-
-    void setRight(Tree<T>* right){
-        this->right = right;
-    }
-};
-
-void arrToTree(int* arr, int size, Tree<int>* root, int index = 0){
-    if(index < size){
-        root->setValue(arr[index]);
-        root->setLeft(new Tree<int>());
-        root->setRight(new Tree<int>());
-        arrToTree(arr, size, root->getLeft(), 2 * index + 1);
-        arrToTree(arr, size, root->getRight(), 2 * index + 2);
+    if(largest != root){
+        swap(arr[largest], arr[root]);
+        heapify(arr, size, largest);
     }
 }
 
 void heapSort(int *arr, int size){
-    auto root = new Tree<int>();
-    arrToTree(arr, size, root);
-    cout << "finished tree\n";
+    //create max heap
+    for(int i = (size / 2) - 1; i >= 0; i--){
+        heapify(arr, size, i);
+    }
+
+    for(int i = size - 1; i >= 0; i--){
+        swap(arr[i], arr[0]);
+        heapify(arr, i, 0);
+    }
 }
 
+
+int main(){
+    srand(time(0));
+    const int SIZE = 5;
+    int arr[SIZE] = {7,-2,4,-8,3};
+    printArray(arr, SIZE);
+    heapSort(arr, SIZE);
+    printArray(arr, SIZE);
+}
