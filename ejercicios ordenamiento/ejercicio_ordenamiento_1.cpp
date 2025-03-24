@@ -51,6 +51,22 @@ public:
         return this->puntuacion > l.getPuntuacion();
     }
 
+    bool operator<=(const Libro& l){
+        return this->puntuacion <= l.getPuntuacion();
+    }
+
+    bool operator>=(const Libro& l){
+        return this->puntuacion >= l.getPuntuacion();
+    }
+
+    bool operator==(const Libro& l){
+        return this->puntuacion == l.getPuntuacion();
+    }
+
+    bool operator!=(const Libro& l){
+        return this->puntuacion != l.getPuntuacion();
+    }
+
 private:
     string titulo;
     string categoria;
@@ -73,7 +89,7 @@ public:
     }
 
     void ordenarLista(){
-        libros.sort("");
+        libros.sort("mergeSort");
         cout << "\n======lista ordenada:=======\n";
         mostrarLista();
     }

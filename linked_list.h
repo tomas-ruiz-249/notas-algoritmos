@@ -65,12 +65,26 @@ public:
             cout << "(" << current->getData() << ")--->\n";
             current = current->getNext();
         }
-        cout << "-----------------------------------------\n";
         cout << "NULL\n";
-        cout << "size: " << size << "\n";
-        cout << "head: " << head->getData() << "\n";
-        cout << "tail: " << tail->getData() << "\n";
         cout << "-----------------------------------------\n";
+        // cout << "size: " << size << "\n";
+        // cout << "head: " << head->getData() << "\n";
+        // cout << "tail: " << tail->getData() << "\n";
+        // cout << "-----------------------------------------\n";
+    }
+
+    string to_string(){
+        string str;
+        str += "[HEAD]";
+        Node<T>* current = head;
+        while(current != nullptr){
+            str += "(";
+            str += current->getData();
+            str +=  ")--->\n";
+            current = current->getNext();
+        }
+        str += "NULL\n";
+        return str;
     }
 
     T get(int index){
@@ -84,12 +98,20 @@ public:
         return current->getData();
     }
 
+    void set(int index, T value){
+        if(index >= size || index < 0){
+            return;
+        }
+        Node<T>* current = head;
+        for(int i = 0; i < index; i++){
+            current = current->getNext();
+        }
+        current->setData(value);
+    }
+
     Node<T>* getNode(int index){
         if(index >= size || index < 0){
             return nullptr;
-        }
-        if(index == size - 1){
-            return tail;
         }
         if(index == 0){
             return head;
@@ -205,13 +227,33 @@ public:
     }
 
     void sort(string sort){
-        if(sort == "bubble"){
+        if(sort == "bubbleSort"){
             bubbleSort();
         }
-        else if (sort == "quick"){
+        else if (sort == "selectionSort"){
+            selectionSort();
+        }
+        else if (sort == "insertionSort"){
+            insertionSort();
+        }
+        else if (sort == "shellSort"){
+            shellSort();
+        }
+        else if (sort == "quickSort"){
+            quickSort(0, size - 1);
+        }
+        else if (sort == "heapSort"){
+            heapSort();
+        }
+        else if (sort == "radixSort"){
+        }
+        else if (sort == "bucketSort"){
+        }
+        else if (sort == "mergeSort"){
+            mergeSort(*this);
         }
         else{
-            bubbleSort();
+            quickSort(0, size - 1);
         }
     }
 
@@ -221,12 +263,35 @@ private:
         if(a == b){
             return;
         }
-        Node<T>* A = getNode(a);
-        Node<T>* B = getNode(b);
-        T temp = A->getData();
-        A->setData(B->getData());
-        B->setData(temp);
+        Node<T>* nodeA = getNode(a);
+        Node<T>* nodeB = getNode(b);
+        Node<T>* prevA = getNode(a - 1);
+        Node<T>* prevB = getNode(b - 1);
+
+        if(nodeA == nullptr || nodeB == nullptr){
+            return;
+        }
+
+        if(prevA != nullptr){
+            prevA->setNext(nodeB);
+        }
+        else{
+            head = nodeB;
+        }
+
+        if(prevB != nullptr){
+            prevB->setNext(nodeA);
+        }
+        else{
+            head = nodeA;
+        }
+
+        Node<T>* temp = nodeA->getNext();
+        nodeA->setNext(nodeB->getNext());
+        nodeB->setNext(temp);
+        tail = getNode(size - 1);
     }
+
     void bubbleSort(){
         for(int i = 0; i < size; i++){
             for(int j = 0; j < size - i - 1; j++){
@@ -236,6 +301,161 @@ private:
             }
         }
     }
+
+    void selectionSort(){
+        int minIndex;
+        for(int i = 0; i < size - 1; i++){
+            minIndex = i;
+            for(int j = i + 1; j < size; j++){
+                if(get(j) < get(minIndex)){
+                    minIndex = j;
+                }
+            }
+            if(minIndex != i){
+                swap(i, minIndex);
+            }
+        }
+    }
+
+    void insertionSort(){
+        T temp;
+        int previous;
+        for(int i = 1; i < size; i++){
+            temp = get(i);
+            previous = i - 1;
+            while(previous >= 0 && get(previous) > temp){
+                set(previous + 1, get(previous));
+                previous--;
+            }
+            set(previous + 1, temp);
+        }
+    }
+
+    void shellSort(){
+        int anterior;
+        T temp;
+        for(int intervalo = size/2; intervalo > 0; intervalo/=2){
+            for(int i = intervalo; i < size; i++){
+                temp = get(i);
+                anterior = i - intervalo;
+                while(anterior >= 0 && get(anterior) > temp){
+                    set(anterior + intervalo, get(anterior));
+                    anterior -= intervalo;
+                }
+                set(anterior + intervalo, temp);
+            }
+        }
+    }
+
+    int partition(int low, int high){
+        T pivot = get(high);
+        int swapped = low - 1;
+        for(int compare = low; compare < high; compare++){
+            if(pivot >= get(compare)){
+                swapped++;
+                swap(compare, swapped);
+            }
+        }
+        swap(swapped + 1, high);
+        return swapped + 1;
+    }
+
+    void quickSort(int low, int high){
+        if(low < high){
+            int pivot = partition(low, high);
+            quickSort(low, pivot - 1);
+            quickSort(pivot + 1, high);
+        }
+    }
+
+    void heapify(int size, int root){
+        int largest = root;
+        int left = 2 * root + 1;
+        int right = 2 * root + 2;
+
+        // find largest value and sort
+        if(left < size && get(left) > get(largest)){
+            largest = left;
+        }
+
+        if(right < size && get(right) > get(largest)){
+            largest = right;
+        }
+
+        // if tree isnt sorted, put largest value on root and heapify subtree that was affected
+        if(largest != root){
+            swap(largest, root);
+            heapify(size, largest);
+        }
+    }
+
+    void heapSort(){
+        //unsorted tree into max heap;
+        for(int i = size / 2 - 1; i >= 0; i--){
+            heapify(size, i);
+        }
+
+        for(int i = size - 1; i >= 0; i--){
+            swap(0, i);
+            heapify(i, 0);
+        }
+    }
+
+    void merge(LinkedList<T>& left, LinkedList<T>& right, LinkedList<T>& list){
+        int leftSize = left.getSize();
+        int rightSize = right.getSize();
+        int leftIndex = 0;
+        int rightIndex = 0;
+        int originalIndex = 0;
+
+        while(leftIndex < leftSize && rightIndex < rightSize){
+            if(left.get(leftIndex) < right.get(rightIndex)){
+                list.set(originalIndex, left.get(leftIndex));
+                leftIndex++;
+            }
+            else{
+                list.set(originalIndex, right.get(rightIndex));
+                rightIndex++;
+            }
+            originalIndex++;
+        }
+
+        while(leftIndex < leftSize){
+            list.set(originalIndex, left.get(leftIndex));
+            leftIndex++;
+            originalIndex++;
+        }
+
+        while(rightIndex < rightSize){
+            list.set(originalIndex, right.get(rightIndex));
+            rightIndex++;
+            originalIndex++;
+        }
+    }
+
+    void mergeSort(LinkedList<T>& list){
+        if(list.getSize() <= 1){
+            return;
+        }
+
+        int middle = list.getSize() / 2;
+        LinkedList<T> left;
+        LinkedList<T> right;
+
+        for(int i = 0; i < list.getSize(); i++){
+            if(i < middle){
+                left.append(list.get(i));
+            }
+            else{
+                right.append(list.get(i));
+            }
+        }
+        mergeSort(left);
+        mergeSort(right);
+        merge(left, right, list);
+    }
+
+
 // ---------------------------------- searching-------------------------------
 
     int linearSearch(T value){

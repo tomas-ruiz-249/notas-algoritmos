@@ -126,12 +126,105 @@ void heapSort(int *arr, int size){
     }
 }
 
+void merge(int* left , int* right, int* arr, int size){
+    int leftSize = size / 2;
+    int rightSize = size - leftSize;
+    int leftIndex = 0;
+    int rightIndex = 0;
+    int originalIndex = 0;
+    while(leftIndex < leftSize && rightIndex < rightSize){
+        if(left[leftIndex] < right[rightIndex]){
+            arr[originalIndex] = left[leftIndex];
+            leftIndex++;
+        }
+        else{
+            arr[originalIndex] = right[rightIndex];
+            rightIndex++;
+        }
+        originalIndex++;
+    }
+    while(leftIndex < leftSize){
+        arr[originalIndex] = left[leftIndex];
+        originalIndex++;
+        leftIndex++;
+    }
+    while(rightIndex < rightSize){
+        arr[originalIndex] = right[rightIndex];
+        originalIndex++;
+        rightIndex++;
+    }
+}
+
+void mergeSort(int* arr, int size){
+    if(size <= 1){
+        return;
+    }
+    int middle = size / 2;
+    int* left = new int[middle];
+    int* right = new int[size - middle];
+
+    int k = 0;
+    for(int i = 0; i < size; i++){
+        if(i < middle){
+            left[i] = arr[i];
+        }
+        else{
+            right[k] = arr[i];
+            k++;
+        }
+    }
+
+    mergeSort(left, middle);
+    mergeSort(right, size - middle);
+    merge(left, right, arr, size);
+    delete[] left;
+    delete[] right;
+}
+
+int getMax(int* arr, int size){
+    int max = arr[0];
+    for(int i = 0; i < size; i++){
+        if(arr[i] > max){
+            max = arr[i];
+        }
+    }
+    return max;
+}
+
+void placeCountingSort(int* arr, int size, int place){
+    int max = getMax(arr, size);
+    int* count = new int[max + 1]();
+    int* output = new int[size];
+    for(int i = 0; i < size; i++){
+        count[(arr[i] / place) % 10]++;
+    }
+    for(int i = 1; i < max; i++){
+        count[i] += count[i - 1];
+    }
+    for(int i = size - 1; i >= 0; i--){
+        output[count[(arr[i] / place) % 10] - 1] = arr[i];
+        count[(arr[i] / place) % 10]--;
+    }
+    for(int i = 0; i < size; i++){
+        arr[i] = output[i];
+    }
+}
+
+void radixSort(int* arr, int size){
+    int max = getMax(arr, size);
+    for(int place = 1; max / place > 0; place *= 10){
+        placeCountingSort(arr, size, place);
+    }
+}
 
 int main(){
     srand(time(0));
     const int SIZE = 5;
-    int arr[SIZE] = {7,-2,4,-8,3};
+    int arr[SIZE];
+    for(int i = 0; i < SIZE; i++){
+        arr[i] = rand() % 10 + 1;
+    }
     printArray(arr, SIZE);
-    heapSort(arr, SIZE);
+    radixSort(arr, SIZE);
     printArray(arr, SIZE);
 }
