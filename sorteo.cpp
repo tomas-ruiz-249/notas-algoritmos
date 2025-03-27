@@ -195,6 +195,7 @@ void placeCountingSort(int* arr, int size, int place){
     int max = getMax(arr, size);
     int* count = new int[max + 1]();
     int* output = new int[size];
+
     for(int i = 0; i < size; i++){
         count[(arr[i] / place) % 10]++;
     }

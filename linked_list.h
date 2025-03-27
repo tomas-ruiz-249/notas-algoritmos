@@ -67,10 +67,10 @@ public:
         }
         cout << "NULL\n";
         cout << "-----------------------------------------\n";
-        // cout << "size: " << size << "\n";
-        // cout << "head: " << head->getData() << "\n";
-        // cout << "tail: " << tail->getData() << "\n";
-        // cout << "-----------------------------------------\n";
+        cout << "size: " << size << "\n";
+        cout << "head: " << head->getData() << "\n";
+        cout << "tail: " << tail->getData() << "\n";
+        cout << "-----------------------------------------\n";
     }
 
     string to_string(){
@@ -121,7 +121,6 @@ public:
             current = current->getNext();
         }
         return current;
-
     }
 
     void append(T newValue){
@@ -160,8 +159,16 @@ public:
         }
     }
 
-    int find(T value){
-        return binarySearch(value);
+    int find(T value, string option){
+        if(option == "binarySearch"){
+            return binarySearch(value);
+        }
+        else if(option == "linearSearch"){
+            return linearSearch(value);
+        }
+        else{
+            return binarySearch(value);
+        }
     }
 
     void remove(int index){
@@ -186,7 +193,7 @@ public:
     }
 
     void removeValue(T value){
-        int index = find(value);
+        int index = find(value, "binarySearch");
         if(index == -1){
             cout << "could not find value to be removed\n";
             return;
@@ -226,34 +233,30 @@ public:
         return tail;
     }
 
-    void sort(string sort){
+    void sort(string sort, bool ascending){
         if(sort == "bubbleSort"){
-            bubbleSort();
+            bubbleSort(ascending);
         }
         else if (sort == "selectionSort"){
-            selectionSort();
+            selectionSort(ascending);
         }
         else if (sort == "insertionSort"){
-            insertionSort();
+            insertionSort(ascending);
         }
         else if (sort == "shellSort"){
-            shellSort();
+            shellSort(ascending);
         }
         else if (sort == "quickSort"){
-            quickSort(0, size - 1);
+            quickSort(0, size - 1, ascending);
         }
         else if (sort == "heapSort"){
-            heapSort();
-        }
-        else if (sort == "radixSort"){
-        }
-        else if (sort == "bucketSort"){
+            heapSort(ascending);
         }
         else if (sort == "mergeSort"){
-            mergeSort(*this);
+            mergeSort(*this, ascending);
         }
         else{
-            quickSort(0, size - 1);
+            quickSort(0, size - 1, ascending);
         }
     }
 
@@ -292,116 +295,184 @@ private:
         tail = getNode(size - 1);
     }
 
-    void bubbleSort(){
+    void bubbleSort(bool ascending){
         for(int i = 0; i < size; i++){
             for(int j = 0; j < size - i - 1; j++){
-                if(get(j) > get(j + 1)){
-                    swap(j, j + 1);
+                if(ascending){
+                    if(get(j) > get(j + 1)){
+                        swap(j, j + 1);
+                    }
+                }
+                else{
+                    if(get(j) < get(j + 1)){
+                        swap(j, j + 1);
+                    }
                 }
             }
         }
     }
 
-    void selectionSort(){
-        int minIndex;
-        for(int i = 0; i < size - 1; i++){
-            minIndex = i;
-            for(int j = i + 1; j < size; j++){
-                if(get(j) < get(minIndex)){
-                    minIndex = j;
+    void selectionSort(bool ascending){
+        if(ascending){
+            int minIndex;
+            for(int i = 0; i < size - 1; i++){
+                minIndex = i;
+                for(int j = i + 1; j < size; j++){
+                    if(get(j) < get(minIndex)){
+                        minIndex = j;
+                    }
+                }
+                if(minIndex != i){
+                    swap(i, minIndex);
                 }
             }
-            if(minIndex != i){
-                swap(i, minIndex);
+        }
+        else{
+            int maxIndex;
+            for(int i = 0; i < size - 1; i++){
+                maxIndex = i;
+                for(int j = i + 1; j < size; j++){
+                    if(get(j) > get(maxIndex)){
+                        maxIndex = j;
+                    }
+                }
+                if(maxIndex != i){
+                    swap(i, maxIndex);
+                }
             }
         }
     }
 
-    void insertionSort(){
+    void insertionSort(bool ascending){
         T temp;
         int previous;
         for(int i = 1; i < size; i++){
             temp = get(i);
             previous = i - 1;
-            while(previous >= 0 && get(previous) > temp){
-                set(previous + 1, get(previous));
-                previous--;
+            bool comparison;
+            if(ascending){
+                while(previous >= 0 && get(previous) > temp){
+                    set(previous + 1, get(previous));
+                    previous--;
+                }
+            }
+            else{
+                while(previous >= 0 && get(previous) < temp){
+                    set(previous + 1, get(previous));
+                    previous--;
+                }
             }
             set(previous + 1, temp);
         }
     }
 
-    void shellSort(){
+    void shellSort(bool ascending){
         int anterior;
         T temp;
         for(int intervalo = size/2; intervalo > 0; intervalo/=2){
             for(int i = intervalo; i < size; i++){
                 temp = get(i);
                 anterior = i - intervalo;
-                while(anterior >= 0 && get(anterior) > temp){
-                    set(anterior + intervalo, get(anterior));
-                    anterior -= intervalo;
+                if(ascending){
+                    while(anterior >= 0 && get(anterior) > temp){
+                        set(anterior + intervalo, get(anterior));
+                        anterior -= intervalo;
+                    }
+                }
+                else{
+                    while(anterior >= 0 && get(anterior) < temp){
+                        set(anterior + intervalo, get(anterior));
+                        anterior -= intervalo;
+                    }
                 }
                 set(anterior + intervalo, temp);
             }
         }
     }
 
-    int partition(int low, int high){
+    int partition(int low, int high, bool ascending){
         T pivot = get(high);
         int swapped = low - 1;
         for(int compare = low; compare < high; compare++){
-            if(pivot >= get(compare)){
-                swapped++;
-                swap(compare, swapped);
+            if(ascending){
+                if(pivot >= get(compare)){
+                    swapped++;
+                    swap(compare, swapped);
+                }
+            }
+            else{
+                if(pivot <= get(compare)){
+                    swapped++;
+                    swap(compare, swapped);
+                }
             }
         }
         swap(swapped + 1, high);
         return swapped + 1;
     }
 
-    void quickSort(int low, int high){
+    void quickSort(int low, int high, bool ascending){
         if(low < high){
-            int pivot = partition(low, high);
-            quickSort(low, pivot - 1);
-            quickSort(pivot + 1, high);
+            int pivot = partition(low, high, ascending);
+            quickSort(low, pivot - 1, ascending);
+            quickSort(pivot + 1, high, ascending);
         }
     }
 
-    void heapify(int size, int root){
-        int largest = root;
+    void heapify(int size, int root, bool ascending){
         int left = 2 * root + 1;
         int right = 2 * root + 2;
-
-        // find largest value and sort
-        if(left < size && get(left) > get(largest)){
-            largest = left;
+        if(ascending){
+            int largest = root;
+    
+            // find largest value and sort
+            if(left < size && get(left) > get(largest)){
+                largest = left;
+            }
+    
+            if(right < size && get(right) > get(largest)){
+                largest = right;
+            }
+    
+            // if tree isnt sorted, put largest value on root and heapify subtree that was affected
+            if(largest != root){
+                swap(largest, root);
+                heapify(size, largest, ascending);
+            }
         }
-
-        if(right < size && get(right) > get(largest)){
-            largest = right;
-        }
-
-        // if tree isnt sorted, put largest value on root and heapify subtree that was affected
-        if(largest != root){
-            swap(largest, root);
-            heapify(size, largest);
+        else{
+            int smallest = root;
+    
+            // find smallest value and sort
+            if(left < size && get(left) < get(smallest)){
+                smallest = left;
+            }
+    
+            if(right < size && get(right) < get(smallest)){
+                smallest = right;
+            }
+    
+            // if tree isnt sorted, put smallest value on root and heapify subtree that was affected
+            if(smallest != root){
+                swap(smallest, root);
+                heapify(size, smallest, ascending);
+            }
         }
     }
 
-    void heapSort(){
+    void heapSort(bool ascending){
         //unsorted tree into max heap;
         for(int i = size / 2 - 1; i >= 0; i--){
-            heapify(size, i);
+            heapify(size, i, ascending);
         }
 
         for(int i = size - 1; i >= 0; i--){
             swap(0, i);
-            heapify(i, 0);
+            heapify(i, 0, ascending);
         }
     }
 
-    void merge(LinkedList<T>& left, LinkedList<T>& right, LinkedList<T>& list){
+    void merge(LinkedList<T>& left, LinkedList<T>& right, LinkedList<T>& list, bool ascending){
         int leftSize = left.getSize();
         int rightSize = right.getSize();
         int leftIndex = 0;
@@ -409,13 +480,25 @@ private:
         int originalIndex = 0;
 
         while(leftIndex < leftSize && rightIndex < rightSize){
-            if(left.get(leftIndex) < right.get(rightIndex)){
-                list.set(originalIndex, left.get(leftIndex));
-                leftIndex++;
+            if(ascending){
+                if(left.get(leftIndex) < right.get(rightIndex)){
+                    list.set(originalIndex, left.get(leftIndex));
+                    leftIndex++;
+                }
+                else{
+                    list.set(originalIndex, right.get(rightIndex));
+                    rightIndex++;
+                }
             }
             else{
-                list.set(originalIndex, right.get(rightIndex));
-                rightIndex++;
+                if(left.get(leftIndex) > right.get(rightIndex)){
+                    list.set(originalIndex, left.get(leftIndex));
+                    leftIndex++;
+                }
+                else{
+                    list.set(originalIndex, right.get(rightIndex));
+                    rightIndex++;
+                }
             }
             originalIndex++;
         }
@@ -433,7 +516,7 @@ private:
         }
     }
 
-    void mergeSort(LinkedList<T>& list){
+    void mergeSort(LinkedList<T>& list, bool ascending){
         if(list.getSize() <= 1){
             return;
         }
@@ -450,9 +533,9 @@ private:
                 right.append(list.get(i));
             }
         }
-        mergeSort(left);
-        mergeSort(right);
-        merge(left, right, list);
+        mergeSort(left, ascending);
+        mergeSort(right, ascending);
+        merge(left, right, list, ascending);
     }
 
 
@@ -477,16 +560,27 @@ private:
         int low = 0;
         int high = size - 1;
         int mid;
+        bool ascending = get(0) < get(size - 1);
         while(low <= high){
             mid = low + (high - low) / 2;
             if(get(mid) == value){
                 return mid;
             }
-            if(get(mid) < value){
-                low = mid + 1;
+            if(ascending){
+                if(get(mid) < value){
+                    low = mid + 1;
+                }
+                else{
+                    high = mid - 1;
+                }
             }
             else{
-                high = mid - 1;
+                if(get(mid) > value){
+                    low = mid + 1;
+                }
+                else{
+                    high = mid - 1;
+                }
             }
         }
         return -1;
