@@ -42,7 +42,7 @@ public:
     }
 
     string to_string() const {
-        return titulo + ", " + std::to_string(categoria) + ", " + std::to_string(puntuacion);
+        return titulo + ", categoria: " + std::to_string(categoria) + ", puntuacion: " + std::to_string(puntuacion);
     }
 
     friend std::ostream& operator<<(std::ostream& os, const Libro& l) {

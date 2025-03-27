@@ -166,8 +166,8 @@ private:
 
 int main(){
     srand(time(0));
-    Inventario b;
-    b.initLista(20);
-    b.ordenarLista();
-    b.buscar();
+    Inventario i;
+    i.initLista(20);
+    i.ordenarLista();
+    i.buscar();
 };

@@ -158,8 +158,8 @@ private:
 
 int main(){
     srand(time(0));
-    Catalogo b;
-    b.initLista(20);
-    b.ordenarLista();
-    b.buscar();
+    Catalogo c;
+    c.initLista(20);
+    c.ordenarLista();
+    c.buscar();
 };
