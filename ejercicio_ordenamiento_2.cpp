@@ -122,8 +122,8 @@ public:
         }
         if(i != -1){
             bool inRange = true;
-            while(i < peliculas.getSize() && inRange){
-                cout << peliculas.get(i) << "\n";
+            while(i > 0 && i < peliculas.getSize() && inRange){
+                cout << peliculas.get(i) <<"\n";
                 if(ascendiente){
                     i++;
                 }

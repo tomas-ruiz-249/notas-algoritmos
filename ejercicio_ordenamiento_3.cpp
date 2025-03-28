@@ -96,7 +96,7 @@ public:
     }
 
     void ordenarLista(){
-        productos.sort("heapSort", ascendiente);
+        productos.sort("mergeSort", ascendiente);
         cout << "\n======lista ordenada:=======\n";
         mostrarLista();
     }
@@ -130,7 +130,7 @@ public:
         }
         if(i != -1){
             bool inRange = true;
-            while(i < productos.getSize() && inRange){
+            while(i > 0 && i < productos.getSize() && inRange){
                 cout << productos.get(i) << "\n";
                 if(ascendiente){
                     i++;
