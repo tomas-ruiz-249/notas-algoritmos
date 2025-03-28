@@ -12,7 +12,6 @@ double roundDec(double num, int places){
 
 double randomDouble(double min, double max){
     double f = (double)rand() / RAND_MAX;
-    return roundDec(min + f * (max - min), 2);
 }
 
 
@@ -88,7 +87,7 @@ public:
     }
 
     void ordenarLista(){
-        peliculas.sort("mergeSort", ascendiente);
+        peliculas.sort("heapSort", ascendiente);
         cout << "\n======lista ordenada:=======\n";
         mostrarLista();
     }
