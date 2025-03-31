@@ -173,7 +173,6 @@ public:
 
     void remove(int index){
         if(index < 0 || index > size-1 || head == nullptr){
-            cout << "can't remove node at specified index\n";
             return;
         }
         Node<T>* prev = head;
@@ -190,6 +189,7 @@ public:
             delete current;
         }
         size--;
+        tail = getNode(size - 1);
     }
 
     void removeValue(T value){
