@@ -48,17 +48,23 @@ public:
         size = 0;
     }
 
-    ~LinkedList(){
-        Node<T>* current = head;
-        Node<T>* next = nullptr;
-        while(current != nullptr){
-            next = current->getNext();
-            delete current;
-            current = next;
-        }
-    }
+    // ~LinkedList(){
+    //     Node<T>* current = head;
+    //     Node<T>* next = nullptr;
+    //     while(current != nullptr){
+    //         next = current->getNext();
+    //         delete current;
+    //         current = next;
+    //     }
+    // }
 
     void print(){
+        if (size <= 0){
+            cout << "------------\n";
+            cout << "Empty list\n";
+            cout << "------------\n";
+            return;
+        }
         cout << "[HEAD]";
         Node<T>* current = head;
         while(current != nullptr){
@@ -87,7 +93,7 @@ public:
         return str;
     }
 
-    T get(int index){
+    T get(int index) const{
         if(index >= size || index < 0){
             return T();
         }
@@ -221,7 +227,7 @@ public:
         }
     }
 
-    int getSize(){
+    int getSize() const{
         return size;
     }
 
