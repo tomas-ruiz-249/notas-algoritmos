@@ -51,16 +51,6 @@ public:
         size = 0;
     }
 
-    // ~LinkedList(){
-    //     Node<T>* current = head;
-    //     Node<T>* next = nullptr;
-    //     while(current != nullptr){
-    //         next = current->getNext();
-    //         delete current;
-    //         current = next;
-    //     }
-    // }
-
     void print(){
         if (size <= 0){
             cout << "------------\n";
