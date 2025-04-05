@@ -25,6 +25,9 @@ public:
     T getData(){
         return data;
     }
+    T* getDataPtr(){
+        return &data;
+    }
     void setData(T data){
         this->data = data;
     }
@@ -85,7 +88,7 @@ public:
         Node<T>* current = head;
         while(current != nullptr){
             str += "(";
-            str += current->getData();
+            str += current->getData()->to_string();
             str +=  ")--->\n";
             current = current->getNext();
         }
@@ -102,6 +105,17 @@ public:
             current = current->getNext();
         }
         return current->getData();
+    }
+
+    T* getPtr(int index){
+        if(index >= size || index < 0){
+            return nullptr;
+        }
+        Node<T>* current = head;
+        for(int i = 0; i < index; i++){
+            current = current->getNext();
+        }
+        return current->getDataPtr();
     }
 
     void set(int index, T value){
@@ -400,16 +414,32 @@ private:
         T pivot = get(high);
         int swapped = low - 1;
         for(int compare = low; compare < high; compare++){
-            if(ascending){
-                if(pivot >= get(compare)){
-                    swapped++;
-                    swap(compare, swapped);
+            if constexpr (std::is_pointer<T>::value){
+                if(ascending){
+                    if(*pivot >= *get(compare)){
+                        swapped++;
+                        swap(compare, swapped);
+                    }
+                }
+                else{
+                    if(*pivot <= *get(compare)){
+                        swapped++;
+                        swap(compare, swapped);
+                    }
                 }
             }
             else{
-                if(pivot <= get(compare)){
-                    swapped++;
-                    swap(compare, swapped);
+                if(ascending){
+                    if(pivot >= get(compare)){
+                        swapped++;
+                        swap(compare, swapped);
+                    }
+                }
+                else{
+                    if(pivot <= get(compare)){
+                        swapped++;
+                        swap(compare, swapped);
+                    }
                 }
             }
         }
