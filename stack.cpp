@@ -4,7 +4,7 @@
 using namespace std;
 
 template <typename T>
-class Heap{
+class Stack{
 public:
     void push(T value){
         list.append(value);
@@ -50,7 +50,7 @@ private:
 };
 
 int main(){
-    Heap<const char*> h;
+    Stack<const char*> h;
     h.push("a");
     h.push("b");
     h.push("c");
