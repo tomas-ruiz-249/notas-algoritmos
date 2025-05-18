@@ -5,15 +5,16 @@
 #include <random>
 #include <algorithm>
 #include <queue>
-#include <stack>
 #include <set>
 
 using namespace std;
 
 struct Mensaje{
     vector<int> reacciones;
+    int reaccionesPositivas;
     Mensaje(vector<int> reacciones){
         this->reacciones = reacciones;
+        reaccionesPositivas = 0;
     }
     Mensaje() = default;
 };
@@ -79,7 +80,7 @@ public:
         cout << "---------------\n";
     }
 
-    int searchMostConnected(){
+    int most_connected(){
         vector<int> stack;
         set<int> visited;
 
@@ -115,6 +116,110 @@ public:
         return maxID;
     }
 
+    int mostPositiveReactions(){
+        vector<int> queue;
+        set<int> visited;
+        int start = 0;
+        queue.push_back(start);
+        int maxReaccionesPositivas = -1;
+        int maxID = -1;
+
+        while(!queue.empty()){
+            int current = queue.at(0);
+            queue.erase(queue.begin());
+            visited.insert(current);
+
+            vector<Mensaje> mensajes = nodos[current].mensajes;
+            int reaccionesPositivas = 0;
+            for(auto mensaje : mensajes){
+                reaccionesPositivas += mensaje.reaccionesPositivas;
+            }
+            if(reaccionesPositivas > maxReaccionesPositivas){
+                maxReaccionesPositivas = reaccionesPositivas;
+                maxID = current;
+            }
+
+            for(int i = 0; i < matriz[current].size();i++){
+                if(
+                    i != current &&
+                    matriz[current][i] != 0 &&
+                    visited.find(i) == visited.end() &&
+                    find(queue.begin(), queue.end(), i) == queue.end()
+                ){
+                    queue.push_back(i);
+                }
+            }
+        }
+        cout << "most positive reactions is ID " << maxID << "\n";
+        return maxID;
+    }
+
+    int farthestNeighbor(int A){
+        vector<int> queue;
+        set<int> visited;
+        queue.push_back(A);
+        int current;
+
+        while(!queue.empty()){
+            current = queue.at(0);
+            queue.erase(queue.begin());
+            visited.insert(current);
+
+            for(int i = 0; i < matriz[current].size();i++){
+                if(
+                    i != current &&
+                    matriz[current][i] != 0 &&
+                    visited.find(i) == visited.end() &&
+                    find(queue.begin(), queue.end(), i) == queue.end()
+                ){
+                    queue.push_back(i);
+                }
+            }
+        }
+        cout << "the farthest neighbor of " << A << " is " << current;
+        return current;
+    }
+
+    bool pathWithIntermediate(int A, int B, int C) {
+        queue<int> q;
+        set<int> visited;
+        q.push(A);
+        visited.insert(A);
+        int saltos = 0;
+        const int MAX_SALTOS = 7;
+
+        bool visitedC = (A == C);
+
+        while (!q.empty() && saltos < MAX_SALTOS) {
+            int levelSize = q.size();
+            saltos++;
+
+            for (int j = 0; j < levelSize; ++j) {
+                int current = q.front();
+                q.pop();
+                cout << current << " ";
+
+                if (current == B) {
+                    return visitedC;
+                }
+
+                for (int i = 0; i < matriz[current].size(); ++i) {
+                    if (
+                        i != current &&
+                        matriz[current][i] != 0 &&
+                        visited.find(i) == visited.end()
+                    ) {
+                        q.push(i);
+                        visited.insert(i);
+                        if (i == C) visitedC = true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
 private:
     vector<vector<int>> matriz;
     map<int, NodoCiudadanos> nodos;
@@ -126,11 +231,16 @@ private:
         for(int i = 0; i < numMensajes; i++){
             int numReacciones = (rand() % 50) + 1;
             vector<int> reacciones;
+            int numPositivas = 0;
             for(int j = 0; j < numReacciones; j++){
                 int reaccion = (rand() % 11) - 5;
+                if (reaccion > 0){
+                    numPositivas++;
+                }
                 reacciones.push_back(reaccion);
             }
             Mensaje m(reacciones);
+            m.reaccionesPositivas = numPositivas;
             mensajes.push_back(m);
         }
 
@@ -151,12 +261,17 @@ private:
     void generarAristas(int A){
         int numConexiones = count(matriz[A].begin(), matriz[A].end(), 1);
         int maxConexiones = (rand() % 3) + 1;
+        map<int, bool> intentado;
         while(numConexiones < maxConexiones){
             int B;
             int countA;
             int countB;
             do{
+                if(intentado.size() == 10){
+                    cout << "imposible";
+                }
                 B = rand() % matriz[A].size();
+                intentado[B] = true;
                 countA = count(matriz[A].begin(), matriz[A].end(), 1);
                 countB = count(matriz[B].begin(), matriz[B].end(), 1);
             }
