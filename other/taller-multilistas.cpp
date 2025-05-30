@@ -39,16 +39,16 @@ public:
     }
 
     void print(){
-        cout << "    Vehiculos\n";
+        cout << "----PILA---\n";
         for(int i = 0; i < capacity; i++){
-            cout << "    ";
             cout << i << ": ";
             if(arr[i] == T()){
-                cout << "vacio\n";
+                cout << "vacio";
             }
             else{
-                cout << arr[i] << '\n';
+                cout << arr[i];
             }
+            cout << ", ";
         }
     }
 
